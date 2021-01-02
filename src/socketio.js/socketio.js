@@ -1,4 +1,4 @@
-import pregame from '../game-logic/preGame';
+import pregame from '../gameLogic/preGame';
 const socketio = require('socket.io');
 
 const ROOMID = "room-student-ID#1";

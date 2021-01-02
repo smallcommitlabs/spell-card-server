@@ -7,20 +7,20 @@ const TIMERLENGTH = 30000;
 
 export default function pregame(socket, roomID) {
    // start timer in socket.io room
-   socket.to(roomID).emit('start pre-game');
+   socket.to(roomID).emit(PREGAMESTART);
 
    // send first 5 cards to each user in the room
    // TODO: turn into playerID 
    // cards selected, and send cards to game
    let cards = cardRoundLogic();
-   socket.to(roomID).emit('cards', cards)
+   socket.to(roomID).emit(CARDS, cards)
 
    // On either timer TimeOut or Continue button press, start game
    let preGamePromsie = new Promise((fulfill, reject) => {
       // start timer
       timer = setTimeout(() => {
          // start the game
-         socket.to(roomID).emit('stop pre-game');
+         socket.to(roomID).emit(PREGAMEFINISH);
 
          // send selected cards to the server-side game
          fulfill(cards);
@@ -28,13 +28,13 @@ export default function pregame(socket, roomID) {
       }, TIMERLENGTH);
 
       // if continue is heard, stop the timeout
-      socket.on('continue', msg => {
+      socket.on(CONTINUE, msg => {
          clearTimeout(timer);
-         socket.to(roomID).emit('stop pre-game');
+         socket.to(roomID).emit(PREGAMEFINISH);
 
          // TODO: logic to replace the selected cards and generate new ones
          
-         socket.to(roomID).emit('cards', cards)
+         socket.to(roomID).emit(CARDS, cards)
 
          // send selected cards to the server-side game
          fulfill(cards);

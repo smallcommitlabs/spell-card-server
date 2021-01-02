@@ -1,4 +1,4 @@
-import deck from '../dummy-logic/cardData';
+import deck from '../dummyLogic/cardData';
 
 
 export default function cardRoundLogic() {
