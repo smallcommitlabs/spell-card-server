@@ -1,0 +1,23 @@
+{
+  "name": "spell-card-server",
+  "version": "0.0.1",
+  "description": "express and socket.io server to host spell-card game logic",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smallcommitlabs/spell-card-server.git"
+  },
+  "author": "ben-howard-55",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smallcommitlabs/spell-card-server/issues"
+  },
+  "homepage": "https://github.com/smallcommitlabs/spell-card-server#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^3.0.4"
+  }
+}
