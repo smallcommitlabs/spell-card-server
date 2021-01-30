@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import { GameConstants } from "./GameConstants";
+import { preGame } from "./PregameLogic";
 
 /**
  * Game room for an individual user
@@ -35,14 +36,7 @@ class GameRoom {
         this.playerOneShield = GameConstants.SHIELDSIZE;
 
         // initiate pre-game logic
-        this.preGameLogic()
-    }
-
-    /**
-     * Pre game logic
-     */
-    private preGameLogic() {
-        
+        preGame(socket)
     }
 
     /** 
