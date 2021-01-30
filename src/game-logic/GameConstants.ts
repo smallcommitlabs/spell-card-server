@@ -1,0 +1,10 @@
+export enum GameConstants {
+    PLAYERHEALTH = 30,
+    BOSSHEALTH = 60,
+    SHIELDSIZE = 0,
+    DECKSIZE = 30,
+    HANDSIZE = 5,
+    ROUNDTIMER = 30,
+    WRONGANSWERPENALTY = 1,
+    UNANSWEREDPENALTY = 1,
+}

@@ -1,4 +1,5 @@
 import { CardTypes } from '../../Constants';
+import {Deck, Card} from '../../types';
 
 /**
  * cardData.js contains card information for a generic deck for 
@@ -9,7 +10,7 @@ import { CardTypes } from '../../Constants';
  *  - discarded -> whether or not the card has been used
  *  - image -> image location for card
  */
-export const deck = {
+export const deck: Deck = {
     card: [
       {
         name: 'Sword1',

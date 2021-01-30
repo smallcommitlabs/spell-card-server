@@ -11,3 +11,7 @@ export interface Card {
   discarded: boolean;
   image: string;
 }
+
+export interface Deck {
+    card: Card[]
+}
