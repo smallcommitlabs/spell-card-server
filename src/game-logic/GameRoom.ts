@@ -24,7 +24,7 @@ class GameRoom {
     // Spaced Repition List for player
     private playerSRLList; // type: SRLList
 
-    constructor(socket: Socket) {
+    constructor(playerID: number, socket: Socket) {
         this.socket = socket;
 
         // set the player health and bot health and shield
@@ -36,7 +36,7 @@ class GameRoom {
         this.playerOneShield = GameConstants.SHIELDSIZE;
 
         // initiate pre-game logic
-        preGame(socket)
+        preGame(playerID, socket)
     }
 
     /** 

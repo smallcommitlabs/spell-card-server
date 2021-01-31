@@ -8,58 +8,72 @@ import {GameEvent} from '../Constants';
 let cards: Card[] = new Array();
 let hand: Card[] = new Array();
 
-export function preGame( socket: Socket ): Card[] {
-    // get deck from server
-    const promise: Promise<Deck> = new Promise((resolve, reject) => {
-        // TODO: call to get deck, for now is simply just receiving dummy data
-        if (deck !== null && deck.card.length == 15) {
-            resolve(deck);
-        }
-    });
+export function preGame(playerID: number, socket: Socket ): Card[] {
+    // get the deck of the user
+    getDeck(playerID);
 
-    promise.then(
-        ((res) => {
-            // add card response into cards array
-            cards = loadCard(res);
-            // randomise cards
-            cards = createRandomCardList(cards)
-            // get a hand of cards
-            hand = getRandomCards(cards)
-        }),
-        err => {
-            console.log("error getting the deck");
-        });
-
-    // pick a hand and send it to socket
+    // send the hand to the game
     socket.emit(GameEvent.PREGAMESTART, { data: "hand" });
+    
+    // wait for 30s timer or interupt to occur
+    preGameTimer(socket);
+   
+    return cards;
+}
 
+async function preGameTimer(socket: Socket) {
     // start pre-round 30s timer
-    let promise2 = new Promise((resolve, reject) => {
+    let promise: Promise<{type: string, msg: object | null}> = new Promise((resolve, reject) => {
         let timeout = setTimeout(() => {
-            resolve("timeout")
-            console.log("timeout!")
+            resolve({type: "timeout", msg: null})
+            console.log("the 5 seconds timed out!")
         }, 5000);
+        console.log("Started 5 second timeout!");
 
         socket.on("aaa", (msg) => {
-            resolve(msg)
+            resolve({type: "update", msg: msg})
         })
     })
 
-    // wait for either continue signal or timeout
-    promise2.then(res => {
-        if (res === "timeout") {
-            console.log("here")
-            return cards;
-        } else if (res !== null) {
-            // TODO: add the cards
-            // resend the new hands to the user via the socket
-            socket.emit(GameEvent.NEWHAND, {data: "hand"})
+    // wait for the promise timeout or hand refresh
+    let res = await promise;
 
-            return cards;
+    if (res.type === "update" ) {
+        // TODO: change hand
+        socket.emit(GameEvent.NEWHAND, JSON.stringify(hand));
+    }
+}
+
+/**
+ * an async function that receives the deck of the player
+ * @param playerID 
+ */
+async function getDeck(playerID: number) {
+    const promise: Promise<Deck> = new Promise((resolve, reject) => {
+        // TODO: call to get deck, for now is simply just receiving dummy data
+        if (deck !== null && deck.card.length == 15) {
+            setTimeout(() => {
+                console.log("received deck of player: " + playerID);
+                resolve(deck);
+            }, 1000);
+            console.log("waiting for deck of player: " + playerID);
         }
-    })
+    });
 
-    return cards;
+    try {
+        // wait for player deck to return
+        let playerDeck = await promise;
+        // add card response into cards array
+        cards = loadCard(playerDeck);
+        // randomise cards
+        cards = createRandomCardList(cards)
+        // get a hand of cards
+        hand = getRandomCards(cards);
+
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 /**
